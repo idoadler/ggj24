@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class CharScript : MonoBehaviour
 {
+    [Header("Char Elements")]
     Rigidbody2D body;
-
     float horizontal;
     float vertical;
     float moveLimiter = 0.7f;
-
     public float runSpeed = 20.0f;
+
+    public GameManager gameManager;
 
     void Start()
     {
@@ -34,5 +35,10 @@ public class CharScript : MonoBehaviour
         }
 
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        gameManager.IncreaseOfHappiness();
     }
 }
