@@ -36,6 +36,6 @@ public class GameManager : MonoBehaviour
     public void MoveToNextScene()
     {
         nextSceneVar += 1;
-        SceneManager.LoadScene(0 + nextSceneVar);
+        SceneManager.LoadScene( nextSceneVar);
     }
 }
