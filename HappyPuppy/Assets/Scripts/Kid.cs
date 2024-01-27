@@ -3,11 +3,12 @@ using UnityEngine.AI;
 
 public class Kid : MonoBehaviour
 {
+    const int DIR_NUM = 8;
+    const float STEP_LEN = 10;
+
     public GameObject dog;
-    public GameObject[] absoluteDirs;
 
     private NavMeshAgent _agent;
-    private GameObject _lastTarget;
     
     // Start is called before the first frame update
     void Start()
@@ -17,51 +18,51 @@ public class Kid : MonoBehaviour
         _agent.updateUpAxis = false;
     }
 
+    void OnDrawGizmosSelected()
+    {
+        Vector3 dirToPlayer = transform.position - dog.transform.position;
+        var r = transform.position + Quaternion.AngleAxis(0, Vector3.up) * dirToPlayer.normalized*STEP_LEN;
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, r);
+        if (PointInRoom(r)) return;
+        for (int i = 1; i < DIR_NUM; i++)
+        {
+            var run_away = transform.position + Quaternion.AngleAxis(180f/DIR_NUM*i, Vector3.forward) * dirToPlayer.normalized*STEP_LEN;
+            Gizmos.color = PointInRoom(run_away) ? Color.blue : Color.red;
+            Gizmos.DrawLine(transform.position, run_away);
+
+            run_away = transform.position + Quaternion.AngleAxis(-180f/DIR_NUM*i, Vector3.forward) * dirToPlayer.normalized*STEP_LEN;
+            Gizmos.color = PointInRoom(run_away) ? Color.cyan : Color.magenta;
+            Gizmos.DrawLine(transform.position, run_away);
+
+        }
+    }
+    
     // Update is called once per frame
     void Update()
     {
+        _agent.SetDestination(RunAwayPosition());
+    }
+
+    Vector3 RunAwayPosition()
+    {
         Vector3 dirToPlayer = transform.position - dog.transform.position;
+        var run_away = transform.position + dirToPlayer.normalized*STEP_LEN;
+        if (PointInRoom(run_away)) return run_away;
+        for (int i = 1; i < DIR_NUM; i++)
+        {
+            run_away = transform.position + Quaternion.AngleAxis(180f/DIR_NUM*i, Vector3.forward) * dirToPlayer.normalized*STEP_LEN;
+            if (PointInRoom(run_away)) return run_away;
 
-        Vector3 maxPoint = Vector3.zero;
-        GameObject maxObject = null;
-        var run_away = transform.position + dirToPlayer;
-        _agent.SetDestination(run_away);
-        return;
-        if (PointInRoom(run_away))
-        {
-            maxPoint = run_away;
-            maxObject = dog;
-        }
-        else
-        {
-            float maxDist = 100000;
-            foreach (var dir in absoluteDirs)
-            {
-                var pos = dir.transform.position;
-                var newDist = Vector3.Distance(pos, dog.transform.position);
-                if (maxDist > newDist)
-                {
-                    maxDist = newDist;
-                    maxPoint = pos;
-                    maxObject = dir;
-                }
-            }
+            run_away = transform.position + Quaternion.AngleAxis(-180f/DIR_NUM*i, Vector3.forward) * dirToPlayer.normalized*STEP_LEN;
+            if (PointInRoom(run_away)) return run_away;
         }
 
-        if (maxObject != _lastTarget)
-        {
-            _lastTarget = maxObject;
-            print("Target: "+_lastTarget.name);
-        }
-        _agent.SetDestination(maxPoint);
+        return (transform.position + dirToPlayer.normalized * STEP_LEN);
     }
     
     bool PointInRoom(Vector2 point)
     {
-        const float range = 1f;
-        NavMeshHit hit;
-        var res = NavMesh.SamplePosition(point, out hit, range, NavMesh.AllAreas);
-        print("hit("+point+"):" +res + "=" + hit.position);
-        return res;
+        return NavMesh.SamplePosition(point, out _, 1, NavMesh.AllAreas);
     }
 }
