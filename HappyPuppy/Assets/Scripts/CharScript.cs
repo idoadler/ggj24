@@ -11,6 +11,7 @@ public class CharScript : MonoBehaviour
     public GameManager gameManager;
     public Kid kid;
 
+
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
@@ -40,8 +41,22 @@ public class CharScript : MonoBehaviour
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.gameObject.CompareTag("PowerUp"))
+        {
+            Destroy(collision.gameObject);
+            gameManager.ActivatePowerUp();
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        gameManager.IncreaseOfHappiness();
+
+        if (collision.gameObject.CompareTag("Kid"))
+        {
+            gameManager.IncreaseOfHappiness();
+        }
     }
 }
