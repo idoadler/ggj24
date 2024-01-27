@@ -8,8 +8,8 @@ public class CharScript : MonoBehaviour
     float vertical;
     float moveLimiter = 0.7f;
     public float runSpeed = 20.0f;
-
     public GameManager gameManager;
+    public Kid kid;
 
     void Start()
     {
@@ -18,6 +18,11 @@ public class CharScript : MonoBehaviour
 
     void Update()
     {
+        GetComponent<SpriteRenderer>().flipX = kid.transform.position.x < transform.position.x;
+        transform.rotation = kid.running ? Quaternion.Euler(0,0,0) : 
+            kid.transform.position.x < transform.position.x ? 
+                Quaternion.Euler(0,0,-90) : Quaternion.Euler(0,0,90);
+        
         // Gives a value between -1 and 1
         horizontal = Input.GetAxisRaw("Horizontal"); // -1 is left
         vertical = Input.GetAxisRaw("Vertical"); // -1 is down

@@ -3,11 +3,12 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    private const float WAIT_TIME = 1;
+    public const float WAIT_TIME = 3;
+    public const float SLOW_WAIT_TIME = 8;
     
     public int happyPoints;
     public TMP_Text scoreText;
-
+    
     private float _lastScore;
 
     public void IncreaseOfHappiness()

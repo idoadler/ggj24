@@ -329,8 +329,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61f3fb127cf0548e5ae5f291edd6f6eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpeed: 6
+  runSpeed: 5
   gameManager: {fileID: 799456631}
+  kid: {fileID: 1714712735}
 --- !u!212 &344258119
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1588,7 +1589,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42d7f3638844e43f690c80d996b17436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dog: {fileID: 344258116}
+  dog: {fileID: 344258118}
+  running: 1
 --- !u!114 &1714712736
 MonoBehaviour:
   m_ObjectHideFlags: 0

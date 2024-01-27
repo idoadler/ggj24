@@ -7,10 +7,12 @@ public class Kid : MonoBehaviour
     const float STEP_LEN = 10;
     const float TARGET_DIST = 2;
 
-    public GameObject dog;
+    public CharScript dog;
 
     private NavMeshAgent _agent;
     private Vector3 _target;
+    private float _lastCatchTime; 
+    [HideInInspector] public bool running = true;
     
     // Start is called before the first frame update
     void Start()
@@ -25,9 +27,39 @@ public class Kid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector2.Distance(transform.position, _target) < TARGET_DIST)
+        GetComponent<SpriteRenderer>().flipX = dog.transform.position.x < transform.position.x;
+        var elapsed = Time.time - _lastCatchTime;
+        if (running)
         {
-            _target = RunAwayPosition();
+            if (Vector2.Distance(transform.position, dog.transform.position) < TARGET_DIST ||
+                !PointInRoom(_target) || Vector2.Distance(transform.position, _target) < TARGET_DIST)
+            {
+                _target = RunAwayPosition();
+                _agent.SetDestination(_target);
+            }
+
+            if (elapsed > GameManager.SLOW_WAIT_TIME && GetComponent<NavMeshAgent>().speed > 2)
+            {
+                GetComponent<NavMeshAgent>().speed *= 0.8f;
+                _lastCatchTime = Time.time;
+            }
+        }
+        else
+        {
+            if (elapsed > GameManager.WAIT_TIME)
+            {
+                _lastCatchTime = Time.time;
+                running = true;
+                _target = RunAwayPosition();
+            }
+            else if (elapsed > GameManager.WAIT_TIME - 1)
+            {
+                _target = RunAwayPosition();
+            }
+            else
+            {
+                _target = dog.transform.position;
+            }
             _agent.SetDestination(_target);
         }
     }
@@ -56,6 +88,8 @@ public class Kid : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(_target, 0.5f);
         Vector3 dirToPlayer = transform.position - dog.transform.position;
         var r = transform.position + Quaternion.AngleAxis(0, Vector3.up) * dirToPlayer.normalized*STEP_LEN;
         Gizmos.color = Color.green;
@@ -71,6 +105,16 @@ public class Kid : MonoBehaviour
             Gizmos.color = PointInRoom(run_away) ? Color.cyan : Color.magenta;
             Gizmos.DrawLine(transform.position, run_away);
 
+        }
+    }
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (running)
+        {
+            GetComponent<NavMeshAgent>().speed = dog.runSpeed * 1.3f;
+            running = false;
+            _lastCatchTime = Time.time;
         }
     }
 }
