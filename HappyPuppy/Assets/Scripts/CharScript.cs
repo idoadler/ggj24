@@ -16,6 +16,7 @@ public class CharScript : MonoBehaviour
         Instance = this;
     }
 
+
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
@@ -46,8 +47,22 @@ public class CharScript : MonoBehaviour
         GetComponent<AudioSource>().volume = isIdle ? 0.3f : 1;
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.gameObject.CompareTag("PowerUp"))
+        {
+            Destroy(collision.gameObject);
+            gameManager.ActivatePowerUp();
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameManager.Instance.IncreaseOfHappiness();
+
+        if (collision.gameObject.CompareTag("Kid"))
+        {
+            gameManager.IncreaseOfHappiness();
+        }
     }
 }
