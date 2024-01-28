@@ -53,7 +53,7 @@ public class CharScript : MonoBehaviour
         if (collision.gameObject.CompareTag("PowerUp"))
         {
             Destroy(collision.gameObject);
-            gameManager.ActivatePowerUp();
+            GameManager.Instance.ActivatePowerUp();
         }
     }
 
@@ -62,7 +62,7 @@ public class CharScript : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Kid"))
         {
-            gameManager.IncreaseOfHappiness();
+            GameManager.Instance.IncreaseOfHappiness();
         }
     }
 }

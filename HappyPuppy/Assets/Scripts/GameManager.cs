@@ -1,7 +1,7 @@
-using System;
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text scoreText;
     
     private float _lastScore;
+    private static int nextSceneVar = 0;
 
     private void Awake()
     {
@@ -44,10 +45,10 @@ public class GameManager : MonoBehaviour
     IEnumerator PowerUp()
     {
         Debug.Log("Speed");
-        charScript.runSpeed += 15;
+        CharScript.Instance.runSpeed += 15;
 
         yield return new WaitForSeconds(3);
 
-        charScript.runSpeed -= 15;
+        CharScript.Instance.runSpeed -= 15;
     }
 }
