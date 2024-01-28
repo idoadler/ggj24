@@ -14,22 +14,42 @@ public class GameManager : MonoBehaviour
     [Header("Scoring")]
     public int happyPoints;
     public TMP_Text scoreText;
-    
+    public float nextSceneTimer = 3;
+
     private float _lastScore;
-    private static int nextSceneVar = 0;
+    private int nextSceneVar = 0;
+    private bool moveToNextScene = false;
 
     private void Awake()
     {
         Instance = this;
     }
 
+    private void Start()
+    {
+        scoreText.text = "Score: " + happyPoints;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
             SceneManager.LoadScene(0);
+
         if(happyPoints >= 10)
         {
-            MoveToNextScene();
+            moveToNextScene = true;
+        }
+
+        if (moveToNextScene)
+        {
+            if (nextSceneTimer < 0)
+            {
+                MoveToNextScene();
+            }
+            else
+            {
+                nextSceneTimer -= Time.deltaTime;
+            }
         }
     }
 
@@ -45,21 +65,6 @@ public class GameManager : MonoBehaviour
     public void MoveToNextScene()
     {
         nextSceneVar += 1;
-        SceneManager.LoadScene(nextSceneVar);
-    }
-
-    public void ActivatePowerUp()
-    {
-        PowerUp();
-    }
-
-    IEnumerator PowerUp()
-    {
-        Debug.Log("Speed");
-        CharScript.Instance.runSpeed += 15;
-
-        yield return new WaitForSeconds(3);
-
-        CharScript.Instance.runSpeed -= 15;
+        SceneManager.LoadScene("End");
     }
 }

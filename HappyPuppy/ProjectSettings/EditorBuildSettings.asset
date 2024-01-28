@@ -9,12 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: c8c171e86be744c3998611f7969a3164
+  - enabled: 1
     path: Assets/Scenes/HappyPuppy.unity
     guid: f8a6cbb603521024c934bd48b34ee1e3
   - enabled: 1
+    path: Assets/Scenes/End.unity
+    guid: 95d15bf28a2bd4d97a0fae5137b32684
+  - enabled: 0
     path: Assets/Scenes/Level1.unity
     guid: 8707107fb4e61cd40a10eaa590ffc083
-  - enabled: 1
-    path: Assets/Scenes/Main.unity
-    guid: c8c171e86be744c3998611f7969a3164
   m_configObjects: {}

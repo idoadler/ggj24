@@ -47,22 +47,9 @@ public class CharScript : MonoBehaviour
         GetComponent<AudioSource>().volume = isIdle ? 0.3f : 1;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-
-        if (collision.gameObject.CompareTag("PowerUp"))
-        {
-            Destroy(collision.gameObject);
-            GameManager.Instance.ActivatePowerUp();
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
-        if (collision.gameObject.CompareTag("Kid"))
-        {
-            GameManager.Instance.IncreaseOfHappiness();
-        }
+       GameManager.Instance.IncreaseOfHappiness();
+        
     }
 }
