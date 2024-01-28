@@ -313,8 +313,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 64
-  m_fontSizeBase: 64
+  m_fontSize: 80
+  m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -572,6 +572,7 @@ GameObject:
   - component: {fileID: 607337715}
   - component: {fileID: 607337717}
   - component: {fileID: 607337716}
+  - component: {fileID: 607337718}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -618,8 +619,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "     _\n   c\" U__/   _____\n o     )     (    PLAY!\n        \"    \"    
-    \"\"\"\"\"\""
+  m_text: "     _\n   c\" U__/   ~~~~\n o     )     (    PLAY!\n        \"    \"    
+    ~~~~"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 804bf55a72f6443c0b332b173ad1dad0, type: 2}
   m_sharedMaterial: {fileID: -2347926307642748853, guid: 804bf55a72f6443c0b332b173ad1dad0, type: 2}
@@ -696,6 +697,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607337714}
   m_CullTransparentMesh: 1
+--- !u!114 &607337718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607337714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e9c074321c94eeeb90da462f9c5185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FPS: 5
+  texts:
+  - "     _\n   c\" U__/   ~~~~\n o     )     (    PLAY!\n        \"    \"    ~~~~"
+  - "     _\n   c\" U__|    ~~~~\n        )     (    pLAY!\n o     \"    \"     ~~~~"
+  - "     _\n   c\" U__/   ~~~~\n o     )     (    P\\AY!\n        \"    \"     ~~~~"
+  - "     _\n oc\" U____ ~~~~\n        )     (    PLaY!\n        \"    \"     ~~~~"
+  - " o  _\n   c\" U__/    ~~~~\n        )     (    PLAy!\n        \"    \"     ~~~~"
+  - "     _\n oc\" U__|   ~~~~\n        )     (    PLAY1\n        \"    \"      ~~~~"
 --- !u!1 &679144643
 GameObject:
   m_ObjectHideFlags: 0
