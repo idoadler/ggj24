@@ -22,6 +22,14 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Update()
+    {
+        if(happyPoints >= 10)
+        {
+            MoveToNextScene();
+        }
+    }
+
     public void IncreaseOfHappiness()
     {
         if(Time.time - _lastScore < WAIT_TIME)
