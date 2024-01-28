@@ -3,20 +3,27 @@ using UnityEngine.AI;
 
 public class Kid : MonoBehaviour
 {
+    public static Kid Instance;
+    
     const int DIR_NUM = 8;
     const float STEP_LEN = 10;
     const float TARGET_DIST = 2;
 
-    public CharScript dog;
-
+    private CharScript _dog;
     private NavMeshAgent _agent;
     private Vector3 _target;
     private float _lastCatchTime; 
     [HideInInspector] public bool running = true;
-    
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        _dog = CharScript.Instance;
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
@@ -27,11 +34,17 @@ public class Kid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetComponent<SpriteRenderer>().flipX = dog.transform.position.x < transform.position.x;
         var elapsed = Time.time - _lastCatchTime;
+        GetComponent<Animator>().SetBool("running",running);
+        GetComponent<AudioSource>().volume = running ? 0.1f : 0.8f;
         if (running)
         {
-            if (Vector2.Distance(transform.position, dog.transform.position) < TARGET_DIST ||
+            if (Vector2.Distance(_dog.transform.position, transform.position) < 15)
+                GetComponent<SpriteRenderer>().flipX = _dog.transform.position.x > transform.position.x;
+            else
+                GetComponent<SpriteRenderer>().flipX = _dog.transform.position.x < transform.position.x;
+
+            if (Vector2.Distance(transform.position, _dog.transform.position) < TARGET_DIST ||
                 !PointInRoom(_target) || Vector2.Distance(transform.position, _target) < TARGET_DIST)
             {
                 _target = RunAwayPosition();
@@ -46,6 +59,7 @@ public class Kid : MonoBehaviour
         }
         else
         {
+            GetComponent<SpriteRenderer>().flipX = _dog.transform.position.x < transform.position.x;
             if (elapsed > GameManager.WAIT_TIME)
             {
                 _lastCatchTime = Time.time;
@@ -58,7 +72,7 @@ public class Kid : MonoBehaviour
             }
             else
             {
-                _target = dog.transform.position;
+                _target = _dog.transform.position;
             }
             _agent.SetDestination(_target);
         }
@@ -66,7 +80,7 @@ public class Kid : MonoBehaviour
 
     Vector3 RunAwayPosition()
     {
-        Vector3 dirToPlayer = transform.position - dog.transform.position;
+        Vector3 dirToPlayer = transform.position - _dog.transform.position;
         var run_away = transform.position + dirToPlayer.normalized*STEP_LEN;
         if (PointInRoom(run_away)) return run_away;
         for (int i = 1; i < DIR_NUM; i++)
@@ -86,33 +100,11 @@ public class Kid : MonoBehaviour
         return NavMesh.SamplePosition(point, out _, 1, NavMesh.AllAreas);
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(_target, 0.5f);
-        Vector3 dirToPlayer = transform.position - dog.transform.position;
-        var r = transform.position + Quaternion.AngleAxis(0, Vector3.up) * dirToPlayer.normalized*STEP_LEN;
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, r);
-        if (PointInRoom(r)) return;
-        for (int i = 1; i < DIR_NUM; i++)
-        {
-            var run_away = transform.position + Quaternion.AngleAxis(180f/DIR_NUM*i, Vector3.forward) * dirToPlayer.normalized*STEP_LEN;
-            Gizmos.color = PointInRoom(run_away) ? Color.blue : Color.red;
-            Gizmos.DrawLine(transform.position, run_away);
-
-            run_away = transform.position + Quaternion.AngleAxis(-180f/DIR_NUM*i, Vector3.forward) * dirToPlayer.normalized*STEP_LEN;
-            Gizmos.color = PointInRoom(run_away) ? Color.cyan : Color.magenta;
-            Gizmos.DrawLine(transform.position, run_away);
-
-        }
-    }
-    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (running)
         {
-            GetComponent<NavMeshAgent>().speed = dog.runSpeed * 1.3f;
+            GetComponent<NavMeshAgent>().speed = _dog.runSpeed * 1.3f;
             running = false;
             _lastCatchTime = Time.time;
         }

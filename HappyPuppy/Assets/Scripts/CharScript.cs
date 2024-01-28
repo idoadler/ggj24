@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class CharScript : MonoBehaviour
 {
+    public static CharScript Instance; 
+    
     [Header("Char Elements")]
     Rigidbody2D body;
     float horizontal;
     float vertical;
     float moveLimiter = 0.7f;
     public float runSpeed = 20.0f;
-    public GameManager gameManager;
-    public Kid kid;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
@@ -18,10 +23,8 @@ public class CharScript : MonoBehaviour
 
     void Update()
     {
-        GetComponent<SpriteRenderer>().flipX = kid.transform.position.x < transform.position.x;
-        transform.rotation = kid.running ? Quaternion.Euler(0,0,0) : 
-            kid.transform.position.x < transform.position.x ? 
-                Quaternion.Euler(0,0,-90) : Quaternion.Euler(0,0,90);
+        GetComponent<SpriteRenderer>().flipX = Kid.Instance.transform.position.x < transform.position.x;
+        GetComponent<Animator>().SetBool("play",!Kid.Instance.running);
         
         // Gives a value between -1 and 1
         horizontal = Input.GetAxisRaw("Horizontal"); // -1 is left
@@ -38,10 +41,13 @@ public class CharScript : MonoBehaviour
         }
 
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
+        bool isIdle = body.velocity.sqrMagnitude <= 0.1f;
+        GetComponent<Animator>().SetBool("idle",isIdle);
+        GetComponent<AudioSource>().volume = isIdle ? 0.3f : 1;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        gameManager.IncreaseOfHappiness();
+        GameManager.Instance.IncreaseOfHappiness();
     }
 }
