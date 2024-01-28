@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
             SceneManager.LoadScene(0);
+        if(happyPoints >= 10)
+        {
+            MoveToNextScene();
+        }
     }
 
     public void IncreaseOfHappiness()
