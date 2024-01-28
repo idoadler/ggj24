@@ -35,7 +35,6 @@ public class Kid : MonoBehaviour
     void Update()
     {
         var elapsed = Time.time - _lastCatchTime;
-        GetComponent<Animator>().SetBool("running",running);
         GetComponent<AudioSource>().volume = running ? 0.1f : 0.8f;
         if (running)
         {
@@ -68,10 +67,12 @@ public class Kid : MonoBehaviour
             }
             else if (elapsed > GameManager.WAIT_TIME - 1)
             {
+                GetComponent<Animator>().SetBool("running",true);
                 _target = RunAwayPosition();
             }
             else
             {
+                GetComponent<Animator>().SetBool("running",false);
                 _target = _dog.transform.position;
             }
             _agent.SetDestination(_target);
