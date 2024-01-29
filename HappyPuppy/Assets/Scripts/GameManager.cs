@@ -26,8 +26,8 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start()
-    {
-        scoreText.text = "Score: " + happyPoints;
+    { 
+        scoreText.text = "Joy: " + happyPoints;
     }
 
     private void Update()
@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
             SceneManager.LoadScene(0);
 
-        if(happyPoints >= 10)
+        if(happyPoints >= 5)
         {
             moveToNextScene = true;
         }
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
             return;
         _lastScore = Time.time;
         happyPoints += 1;
-        scoreText.text = "Score: " + happyPoints;
+        scoreText.text = "Joy: " + happyPoints + "/5";
     }
 
     public void MoveToNextScene()
