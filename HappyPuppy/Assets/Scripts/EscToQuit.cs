@@ -9,6 +9,8 @@ public class EscToQuit : MonoBehaviour
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_WEBGL
+            Debug.Log("Can't quit on web");
 #else
             Application.Quit();
 #endif
