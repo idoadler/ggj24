@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     public float nextSceneTimer = 3;
 
     private float _lastScore;
-    private int nextSceneVar = 0;
     private bool moveToNextScene = false;
 
     private void Awake()
@@ -26,8 +25,11 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start()
-    { 
+    {
+        if (MusicManager.Instance == null)
+            SceneManager.LoadScene(0);
         scoreText.text = "Joy: " + happyPoints;
+        MusicManager.Instance.GameSettings();
     }
 
     private void Update()
@@ -64,7 +66,6 @@ public class GameManager : MonoBehaviour
 
     public void MoveToNextScene()
     {
-        nextSceneVar += 1;
         SceneManager.LoadScene("End");
     }
 }
